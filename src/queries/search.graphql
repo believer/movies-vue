@@ -1,0 +1,6 @@
+query search($title: String) {
+  search(title: $title) {
+    id
+    title
+  }
+}

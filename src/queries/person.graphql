@@ -1,0 +1,6 @@
+query getPerson($name: String!, $type: String!) {
+  movies: getPerson(name: $name, type: $type) {
+    id
+    title
+  }
+}

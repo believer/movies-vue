@@ -1,0 +1,22 @@
+query getMovie($id: String!) {
+  movie(id: $id) {
+    director
+    cast
+    music
+    images {
+      poster
+    }
+    ratings {
+      imdb {
+        rating
+        votes
+      }
+      tomatoes {
+        rating
+      }
+    }
+    tagline
+    title
+    writer
+  }
+}
