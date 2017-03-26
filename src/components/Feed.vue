@@ -81,9 +81,8 @@ export default {
         },
         updateQueries: {
           feed: (previousQueryResult, { mutationResult }) => {
-            console.log(previousQueryResult, mutationResult)
             return {
-              feed: [...previousQueryResult.feed, mutationResult.data.addMovie],
+              feed: [mutationResult.data.addMovie, ...previousQueryResult.feed],
             }
           }
         },
@@ -107,15 +106,10 @@ export default {
   apollo: {
     feed: {
       query: FEED,
+      result (data) {
+        console.log(data)
+      },
       loadingKey: 'loading'
-    },
-    search: {
-      query: SEARCH,
-      variables () {
-        return {
-          title: this.query
-        }
-      }
     }
   }
 }
