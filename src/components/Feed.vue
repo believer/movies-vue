@@ -1,5 +1,13 @@
 <template>
   <div class="feed" v-if="!loading">
+    <form class="addMovie" @submit.prevent="addMovie">
+      <input class="input" placeholder="IMDb ID" v-model="imdbId" />
+      <input class="input" placeholder="User ID" v-model="userId" />
+      <input class="input" placeholder="Rating" v-model="rating" type="number" />
+      <input class="input" placeholder="Date" v-model="date" type="date" />
+      <button type="submit">Add movie</button>
+    </form>
+
     <input @keyup.enter="searchQuery" class="input" placeholder="Search" />
     <ul v-if="query && search.length">
       <router-link
@@ -15,7 +23,7 @@
     <ul>
       <router-link
         v-for="(movie, index) in feed"
-        :key="movie.id"
+        :key="index"
         :to="{ name: 'movie', params: { id: movie.id }}"
         class="link"
         tag="li">
@@ -37,6 +45,7 @@ import Gravatar from '@/components/Gravatar'
 import { toDate } from '@/utils/helpers'
 import FEED from '@/queries/feed.graphql'
 import SEARCH from '@/queries/search.graphql'
+import ADD_MOVIE from '@/mutations/addMovie.graphql'
 
 export default {
   name: 'feed',
@@ -48,7 +57,11 @@ export default {
       feed: [],
       search: [],
       loading: false,
-      query: null
+      query: null,
+      date: '',
+      imdbId: '',
+      userId: '',
+      rating: null
     }
   },
   filters: {
@@ -57,6 +70,38 @@ export default {
   methods: {
     searchQuery (event) {
       this.query = event.target.value
+    },
+    addMovie () {
+      this.$apollo.mutate({
+        mutation: ADD_MOVIE,
+        variables: {
+          id: this.imdbId,
+          rating: parseInt(this.rating, 10),
+          userid: this.userId
+        },
+        updateQueries: {
+          feed: (previousQueryResult, { mutationResult }) => {
+            console.log(previousQueryResult, mutationResult)
+            return {
+              feed: [...previousQueryResult.feed, mutationResult.data.addMovie],
+            }
+          }
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          addMovie: {
+            __typename: 'Movie',
+            id: '-1',
+            date: new Date(),
+            rating: this.rating,
+            title: '',
+            user: {
+              email: '',
+              __typename: 'User'
+            }
+          }
+        }
+      })
     }
   },
   apollo: {
@@ -86,6 +131,10 @@ export default {
     display: grid;
     grid-template-columns: auto 1fr auto 50px;
     grid-column-gap: 10px;
+  }
+
+  .addMovie {
+    margin-bottom: 30px;
   }
 
   .feed {
