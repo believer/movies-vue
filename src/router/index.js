@@ -19,7 +19,7 @@ export default new Router({
       component: Movie
     },
     {
-      path: '/person/:name/:type',
+      path: '/person/:name/:role',
       name: 'person',
       component: Person
     }

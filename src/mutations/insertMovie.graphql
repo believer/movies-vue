@@ -1,0 +1,5 @@
+mutation insertMovie($input: MovieInput!) {
+  insertMovie(input: $input) {
+    title
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="movie">
+  <div class="movie" v-if="movie">
     <a @click="back">Back</a>
     <div class="poster">
       <img :src="poster" />
@@ -7,23 +7,35 @@
     <div class="content">
       <h1>{{ movie.title }}</h1>
       <h4 v-if="movie.tagline">"{{ movie.tagline }}"</h4>
+
+      <ul class="users-viewed">
+        <li class="users-view" v-for="(user, index) in movie.users_viewed">
+          <gravatar :user="user"></gravatar>
+          <div class="users-rating">{{ movie.users_ratings[index] }}</div>
+        </li>
+      </ul>
       
-      <list :items="movie.cast" title="Cast" type="cast"></list>
-      <list :items="movie.director" title="Director" type="director"></list>
-      <list :items="movie.music" title="Music" type="music"></list>
-      <list :items="movie.writer" title="Writer" type="writer"></list>
+      <list :items="movie.actors" title="Cast" role="actor"></list>
+      <list :items="movie.directors" title="Director" role="director"></list>
+      <list :items="movie.composers" title="Music" role="composer"></list>
+      <list :items="movie.writers" title="Writer" role="writer"></list>
     </div>
+  </div>
+  <div v-else>
+    No movie found
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag'
+import Gravatar from '@/components/Gravatar'
 import List from '@/components/List'
-import MOVIE from '@/queries/movie.graphql'
+import MOVIES from '@/queries/movies.graphql'
 
 export default {
   name: 'movies',
   components: {
+    Gravatar,
     List
   },
   data () {
@@ -33,8 +45,8 @@ export default {
   },
   computed: {
     poster () {
-      if (this.movie.images) {
-        return `https://image.tmdb.org/t/p/w320${this.movie.images.poster}`
+      if (this.movie.poster) {
+        return `https://image.tmdb.org/t/p/w320${this.movie.poster}`
       }
     }
   },
@@ -44,12 +56,15 @@ export default {
     }
   },
   apollo: {
-    movie: {
-      query: MOVIE,
+    movies: {
+      query: MOVIES,
       variables () {
         return {
           id: this.$route.params.id
         }
+      },
+      result (data) {
+        this.movie = data.movies[0]
       }
     }
   }
@@ -71,6 +86,25 @@ export default {
 
   .content {
     grid-area: content;
+  }
+
+  .users-viewed {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .users-view {
+    align-items: center;
+    display: flex;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  .users-rating {
+    font-weight: bold;
+    margin-left: 10px;
   }
 
   a {

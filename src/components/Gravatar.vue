@@ -13,9 +13,8 @@ export default {
   computed: {
     gravatarSrc () {
       const gravatarBase = 'http://www.gravatar.com/avatar/'
-      const facebookProfileUrl = `http://graph.facebook.com/${this.user.id}/picture?type=large`
-      const hash = md5(this.user.email)
-      let gravatar = `${gravatarBase}${hash}?d=${encodeURIComponent(facebookProfileUrl)}`
+      const hash = md5(this.user)
+      let gravatar = `${gravatarBase}${hash}`
 
       if (this.size) {
         gravatar = `${gravatar}&s=${this.size}`

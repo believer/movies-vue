@@ -6,7 +6,7 @@ import VueApollo from 'vue-apollo'
 
 const apolloClient = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://movies-api-graphql.33e99398.svc.dockerapp.io:4000/graphql',
+    uri: 'http://movies-graphql-postgres.a8a18d40.svc.dockerapp.io:3000/graphql',
     transportBatching: true
   }),
   addTypename: true,

@@ -1,6 +1,0 @@
-mutation add($id: String!, $rating: Int!, $userid: String!, $date: String) {
-  addMovie(id: $id, rating: $rating, userid: $userid, date: $date) {
-    title
-    cast
-  }
-}

@@ -1,0 +1,14 @@
+query movies($id: String!) {
+  movies(id: $id) {
+    average_rating
+    directors
+    actors
+    composers
+    poster
+    tagline
+    title
+    users_ratings
+    users_viewed
+    writers
+  }
+}

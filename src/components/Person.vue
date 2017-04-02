@@ -43,7 +43,7 @@ export default {
       variables () {
         return {
           name: this.$route.params.name,
-          type: this.$route.params.type
+          role: this.$route.params.role
         }
       }
     }

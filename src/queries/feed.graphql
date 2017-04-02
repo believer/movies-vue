@@ -1,12 +1,10 @@
 query feed {
   feed {
-    date
+    view_date
     id
     title
     rating
-    user {
-      email
-      id
-    }
+    user_email
+    user_id
   }
 }

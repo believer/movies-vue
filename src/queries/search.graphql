@@ -1,5 +1,5 @@
-query search($title: String) {
-  search(title: $title) {
+query search($name: String!, $role: PersonType!) {
+  search: person(name: $name, role: $role) {
     id
     title
   }

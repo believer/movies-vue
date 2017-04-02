@@ -1,5 +1,5 @@
-query getPerson($name: String!, $type: String!) {
-  movies: getPerson(name: $name, type: $type) {
+query person($name: String!, $role: PersonType!) {
+  movies: person(name: $name, role: $role) {
     id
     title
   }
